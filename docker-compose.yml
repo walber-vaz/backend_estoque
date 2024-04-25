@@ -1,0 +1,26 @@
+services:
+  db:
+    build: postgres
+    image: backend_estoque_clientes_db
+    volumes:
+      - $HOME/Documentos/DockerVolumes/Estoque/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DBS=backend_estoque_clientes, backend_estoque_clientes_test
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    cpu_count: 1
+    mem_limit: 1g
+    memswap_limit: 2g
+
+volumes:
+  data:
+    driver: local
