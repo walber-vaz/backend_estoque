@@ -1,0 +1,22 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 80
+
+[*.py]
+indent_size = 4
+profile = black
+max_line_length = 80
+skip = .venv
+src_paths = isort, test
+
+[Makefile]
+indent_style = tab
+indent_size = 8
+tab_width = 8
