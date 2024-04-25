@@ -1,14 +1,11 @@
 from http import HTTPStatus
 
-from fastapi.testclient import TestClient
-
-from app.main import app
-
-client = TestClient(app)
+import pytest
 
 
-def test_read_main():
-    response = client.get('/')
+@pytest.mark.anyio()
+async def test_read_main(client):
+    response = await client.get('/')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Hello World'}

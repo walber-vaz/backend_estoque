@@ -6,11 +6,9 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-DATABASE_URL = (
-    'postgresql+asyncpg://docker:docker@localhost:5432/backend_estoque_clientes'
-)
+from app.config import settings
 
-engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
 
 
 class Base(AsyncAttrs, DeclarativeBase):

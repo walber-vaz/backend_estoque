@@ -14,6 +14,9 @@ sqlalchemy = {extras = ["asyncio"], version = "^2.0.29"}
 psycopg = "^3.1.18"
 psycopg-binary = "^3.1.18"
 asyncpg = "^0.29.0"
+pydantic-settings = "^2.2.1"
+trio = "^0.25.0"
+alembic = "^1.13.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
@@ -45,6 +48,8 @@ run = 'uvicorn app.main:app --reload'
 pre_test = 'task lint'
 test = 'pytest -v -s -x --cov=app -vv --cov-report=term-missing'
 post_test = 'coverage html'
+makemigrations = 'alembic revision --autogenerate'
+migrate = 'alembic upgrade head'
 
 [build-system]
 requires = ["poetry-core"]
