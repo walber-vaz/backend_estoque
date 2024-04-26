@@ -8,41 +8,4 @@
     "Makefile": "makefile"
   },
   "editor.rulers": [88, 120],
-  "[python]": {
-    "diffEditor.ignoreTrimWhitespace": false,
-    "gitlens.codeLens.symbolScopes": [
-      "!Module"
-    ],
-    "editor.formatOnType": true,
-    "editor.wordBasedSuggestions": "off",
-    "editor.tabSize": 4,
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.rulers": [
-      88
-    ],
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    },
-  },
-  "python.languageServer": "Pylance",
-  "python.analysis.autoImportCompletions": true,
-  "pylint.args": [
-    "--errors-only",
-    "--max-line-length=88",
-    "--disable=C0114,C0115,C0116,C0103,R0903,E0401,E0307,E1101,E0110,E1120"
-  ],
-  "flake8.args": [
-    "--max-line-length=88",
-    "--ignore=E203"
-  ],
-  "black-formatter.args": [
-    "--line-length=88",
-    "--skip-string-normalization",
-    "--skip-magic-trailing-comma",
-    "--exclude=.venv",
-    "--exclude=.git",
-    "--exclude=migrations"
-  ],
 }

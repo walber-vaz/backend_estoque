@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     )
 
     DATABASE_URL: str
+    PREFIX: str = '/api/v1'
 
 
 settings: Settings = Settings()

@@ -1,21 +1,27 @@
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import registry
+from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
 
 engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
 
 
-reg = registry()
+class Base(AsyncAttrs, DeclarativeBase):
+    pass
 
 
 async def init_db():
     async with engine.begin() as conn:
-        await conn.run_sync(reg.metadata.create_all(engine))
+        await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_db():
-    await engine.sync_engine.dispose()
+    await engine.dispose()
 
 
 async def get_session():
