@@ -5,14 +5,15 @@ from sqlalchemy import String, text
 from sqlalchemy.orm import Mapped, mapped_column
 from zoneinfo import ZoneInfo
 
-from app.database import Base
+from app.database import reg
 
 
-class User(Base):
+@reg.mapped_as_dataclass
+class User:
     __tablename__ = 'users'
 
     id: Mapped[UUID] = mapped_column(
-        primary_key=True, server_default=text('gen_random_uuid()')
+        primary_key=True, server_default=text('gen_random_uuid()'), init=False
     )
     first_name: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     last_name: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
@@ -22,9 +23,10 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(24), nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(tz=ZoneInfo('UTC'))
+        default=datetime.now(tz=ZoneInfo('UTC')), init=False
     )
     updated_at: Mapped[datetime] = mapped_column(
         default=datetime.now(tz=ZoneInfo('UTC')),
         onupdate=datetime.now(tz=ZoneInfo('UTC')),
+        init=False,
     )
