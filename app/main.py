@@ -10,9 +10,9 @@ from app.routers.user import router as user_router
 
 @asynccontextmanager
 async def get_session(app: FastAPI):
-    await db_init()
+    db_init()
     yield
-    await db_close()
+    db_close()
 
 
 app = FastAPI(lifespan=get_session)
@@ -29,5 +29,5 @@ app.include_router(user_router, prefix=settings.PREFIX)
 
 
 @app.get(f'{settings.PREFIX}/health')
-async def health():
+def health():
     return {'status': 'ok'}

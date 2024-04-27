@@ -1,40 +1,14 @@
 from http import HTTPStatus
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 
 from app.models.user import User
 from app.schemas.user import UserSchemaCreate, UserSchemaResponseCreate
 
 
-async def create_user(
-    session: AsyncSession, user: UserSchemaCreate
-) -> UserSchemaResponseCreate:
-    """
-    Creates a new user in the database.
-
-    Args:
-        session (AsyncSession): The async session to use for the database transaction.
-        user (User): The user object containing the user details.
-
-    Returns:
-        UserSchemaResponseCreate:
-            The response object containing the result of the user creation.
-
-    Raises:
-        None
-
-    Example:
-        >>> session = AsyncSession()
-        >>> user = User(email='example@example.com', hashed_password='hashed_password')
-        >>> create_user(session, user)
-        UserSchemaResponseCreate(
-            message='User created successfully',
-            status=HTTPStatus.CREATED,
-            data=user.id
-        )
-    """
-    is_email_exists = await session.scalar(select(User).where(User.email == user.email))
+def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseCreate:
+    is_email_exists = session.scalar(select(User).where(User.email == user.email))
 
     if is_email_exists:
         raise ValueError('Email already exists')
@@ -47,8 +21,8 @@ async def create_user(
     )
 
     session.add(new_user)
-    await session.commit()
-    await session.refresh(new_user)
+    session.commit()
+    session.refresh(new_user)
 
     response = UserSchemaResponseCreate(
         message='User created successfully', status=HTTPStatus.CREATED, data=new_user.id
