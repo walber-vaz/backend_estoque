@@ -4,10 +4,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
-from app.schemas.user import UserSchemaResponseCreate
+from app.schemas.user import UserSchemaCreate, UserSchemaResponseCreate
 
 
-async def create_user(session: AsyncSession, user: User) -> UserSchemaResponseCreate:
+async def create_user(
+    session: AsyncSession, user: UserSchemaCreate
+) -> UserSchemaResponseCreate:
     """
     Creates a new user in the database.
 
@@ -35,16 +37,21 @@ async def create_user(session: AsyncSession, user: User) -> UserSchemaResponseCr
     is_email_exists = await session.scalar(select(User).where(User.email == user.email))
 
     if is_email_exists:
-        response = UserSchemaResponseCreate(
-            message='Email already exists', status=HTTPStatus.CONFLICT, data=None
-        )
-        return response
+        raise ValueError('Email already exists')
 
-    session.add(user)
+    new_user = User(
+        email=user.email,
+        hashed_password=user.hashed_password,
+        first_name=user.first_name,
+        last_name=user.last_name,
+    )
+
+    session.add(new_user)
     await session.commit()
-    await session.refresh(user)
+    await session.refresh(new_user)
 
     response = UserSchemaResponseCreate(
-        message='User created successfully', status=HTTPStatus.CREATED, data=user.id
+        message='User created successfully', status=HTTPStatus.CREATED, data=new_user.id
     )
+
     return response

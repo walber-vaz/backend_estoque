@@ -11,6 +11,10 @@ class UserBase(BaseModel):
     is_active: bool = True
 
 
+class UserSchemaCreate(UserBase):
+    pass
+
+
 class UserSchemaResponseCreate(BaseModel):
     message: str
     data: UUID
