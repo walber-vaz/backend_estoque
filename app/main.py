@@ -1,7 +1,18 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.database import db_close, db_init
+
+
+@asynccontextmanager
+async def get_session():
+    db_init()
+    yield
+    db_close()
+
 
 app = FastAPI()
 

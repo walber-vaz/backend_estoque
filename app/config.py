@@ -8,6 +8,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str
     PREFIX: str = '/api/v1'
+    DATABASE_URI_TEST: str
 
 
 settings: Settings = Settings()
