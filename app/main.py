@@ -8,13 +8,13 @@ from app.database import db_close, db_init
 
 
 @asynccontextmanager
-async def get_session():
+async def get_session(app: FastAPI):
     await db_init()
     yield
     await db_close()
 
 
-app = FastAPI()
+app = FastAPI(lifespan=get_session)
 
 app.add_middleware(
     CORSMiddleware,
