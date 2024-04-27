@@ -9,9 +9,9 @@ from app.database import db_close, db_init
 
 @asynccontextmanager
 async def get_session():
-    db_init()
+    await db_init()
     yield
-    db_close()
+    await db_close()
 
 
 app = FastAPI()
@@ -26,5 +26,5 @@ app.add_middleware(
 
 
 @app.get(f'{settings.PREFIX}/health')
-def health():
+async def health():
     return {'status': 'ok'}
