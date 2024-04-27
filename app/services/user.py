@@ -1,10 +1,15 @@
 from http import HTTPStatus
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-from app.schemas.user import UserSchemaCreate, UserSchemaResponseCreate
+from app.schemas.user import (
+    UserSchemaCreate,
+    UserSchemaResponseCreate,
+    UserSchemaResponseGetID,
+)
 
 
 def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseCreate:
@@ -29,3 +34,12 @@ def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseC
     )
 
     return response
+
+
+def get_user_by_id(session: Session, user_id: UUID) -> UserSchemaResponseGetID:
+    user = session.scalar(select(User).where(User.id == user_id))
+
+    if not user:
+        raise ValueError('User not found')
+
+    return user
