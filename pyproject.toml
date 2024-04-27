@@ -16,15 +16,13 @@ psycopg-binary = "^3.1.18"
 pydantic-settings = "^2.2.1"
 alembic = "^1.13.1"
 pydantic = {extras = ["email"], version = "^2.7.1"}
+asyncpg = "^0.29.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
-pytest-cov = "^5.0.0"
 taskipy = "^1.12.2"
 ruff = "^0.4.1"
 pre-commit = "^3.7.0"
-pytest-asyncio = "^0.23.6"
-trio = "^0.25.0"
 
 [tool.ruff]
 line-length = 88
@@ -38,17 +36,17 @@ select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 preview = true
 quote-style = 'single'
 
-[tool.pytest.ini_options]
-pythonpath = "."
-addopts = '-p no:warnings'
+# [tool.pytest.ini_options]
+# pythonpath = "."
+# addopts = '-p no:warnings'
 
 [tool.taskipy.tasks]
 lint = 'ruff check .; ruff check . --diff'
 format = 'ruff check . --fix; ruff format .'
 run = 'uvicorn app.main:app --reload'
-pre_test = 'task lint'
-test = 'pytest -v -s -x --cov=app -vv --cov-report=term-missing'
-post_test = 'coverage html'
+# pre_test = 'task lint'
+# test = 'pytest -v -s -x --cov=app -vv --cov-report=term-missing'
+# post_test = 'coverage html'
 makemigrations = 'alembic revision --autogenerate'
 migrate = 'alembic upgrade head'
 

@@ -1,13 +1,13 @@
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
     first_name: str
     last_name: str
     hashed_password: str
-    email: str
+    email: EmailStr
     is_active: bool = True
 
 
