@@ -8,7 +8,10 @@ from app.models.user import User
 from app.schemas.user import (
     UserSchemaCreate,
     UserSchemaResponseCreate,
-    UserSchemaResponseGetID,
+    UserSchemaResponseGet,
+    UserSchemaResponseUpdate,
+    UserSchemaUpdate,
+    UserWithoutPassword,
 )
 
 
@@ -30,16 +33,46 @@ def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseC
     session.refresh(new_user)
 
     response = UserSchemaResponseCreate(
-        message='User created successfully', status=HTTPStatus.CREATED, data=new_user.id
+        message='User created successfully',
+        status=HTTPStatus.CREATED,
+        data=[{'user_id': new_user.id}],
     )
 
     return response
 
 
-def get_user_by_id(session: Session, user_id: UUID) -> UserSchemaResponseGetID:
+def get_user_by_id(session: Session, user_id: UUID) -> UserSchemaResponseGet:
     user = session.scalar(select(User).where(User.id == user_id))
 
     if not user:
         raise ValueError('User not found')
 
-    return user
+    response = UserSchemaResponseGet(
+        message='User found successfully',
+        status=HTTPStatus.OK,
+        data=[UserWithoutPassword(**user.__dict__)],
+    )
+
+    return response
+
+
+def update_user_by_id(data: UserSchemaUpdate, session: Session, user_id: UUID):
+    user = session.scalar(select(User).where(User.id == user_id))
+
+    if not user:
+        raise ValueError('User not found')
+
+    update_fields = {}
+    for key, value in data.model_dump(exclude_none=True).items():
+        if getattr(user, key) != value:
+            setattr(user, key, value)
+            update_fields[key] = value
+
+    session.commit()
+    session.refresh(user)
+
+    response = UserSchemaResponseUpdate(
+        message='User updated successfully', status=HTTPStatus.OK, data=[update_fields]
+    )
+
+    return response
