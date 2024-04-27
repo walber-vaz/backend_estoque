@@ -1,9 +1,11 @@
+import pytest
 from sqlalchemy import select
 
 from app.models.user import User
 
 
-def test_create_user(session):
+@pytest.mark.asyncio()
+async def test_create_user(session):
     new_user = User(
         first_name='John',
         last_name='Doe',
@@ -12,9 +14,10 @@ def test_create_user(session):
     )
 
     session.add(new_user)
-    session.commit()
+    await session.commit()
+    await session.refresh(new_user)
 
-    stmt = session.scalar(select(User).where(User.email == 'john_doe@email.com'))
+    stmt = await session.scalar(select(User).where(User.email == 'john_doe@email.com'))
 
     assert stmt.email == 'john_doe@email.com'
     assert stmt.first_name == 'John'
