@@ -15,6 +15,8 @@ from app.schemas.user import (
     UserWithoutPassword,
 )
 
+msg_not_found = 'User not found'
+
 
 def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseCreate:
     is_email_exists = session.scalar(select(User).where(User.email == user.email))
@@ -46,7 +48,7 @@ def get_user_by_id(session: Session, user_id: UUID) -> UserSchemaResponseGet:
     user = session.scalar(select(User).where(User.id == user_id))
 
     if not user:
-        raise ValueError('User not found')
+        raise ValueError(msg_not_found)
 
     response = UserSchemaResponseGet(
         message='User found successfully',
@@ -61,7 +63,7 @@ def update_user_by_id(data: UserSchemaUpdate, session: Session, user_id: UUID):
     user = session.scalar(select(User).where(User.id == user_id))
 
     if not user:
-        raise ValueError('User not found')
+        raise ValueError(msg_not_found)
 
     update_fields = {}
     for key, value in data.model_dump(exclude_none=True).items():
@@ -83,7 +85,7 @@ def delete_user_by_id(session: Session, user_id: UUID):
     user = session.scalar(select(User).where(User.id == user_id))
 
     if not user:
-        raise ValueError('User not found')
+        raise ValueError(msg_not_found)
 
     user.is_active = False
     session.commit()
