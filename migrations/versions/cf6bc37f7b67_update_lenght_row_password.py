@@ -1,8 +1,8 @@
-"""create table user
+"""update lenght row password
 
-Revision ID: 64af8637d068
+Revision ID: cf6bc37f7b67
 Revises:
-Create Date: 2024-04-27 17:54:00.362275
+Create Date: 2024-04-28 13:32:08.992607
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '64af8637d068'
+revision: str = 'cf6bc37f7b67'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,7 +27,7 @@ def upgrade() -> None:
             'id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False
         ),
         sa.Column('email', sa.String(length=200), nullable=False),
-        sa.Column('hashed_password', sa.String(length=24), nullable=False),
+        sa.Column('hashed_password', sa.String(), nullable=False),
         sa.Column('is_active', sa.Boolean(), nullable=False),
         sa.Column('first_name', sa.String(length=50), nullable=False),
         sa.Column('last_name', sa.String(length=50), nullable=False),

@@ -17,6 +17,8 @@ pydantic-settings = "^2.2.1"
 alembic = "^1.13.1"
 pydantic = {extras = ["email"], version = "^2.7.1"}
 asyncpg = "^0.29.0"
+pyjwt = "^2.8.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"

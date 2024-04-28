@@ -19,7 +19,7 @@ class User(Base):
         default=uuid4,
     )
     email: Mapped[str] = mapped_column(String(200), unique=True, index=True)
-    hashed_password: Mapped[str] = mapped_column(String(24))
+    hashed_password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True)
     first_name: Mapped[str] = mapped_column(String(50))
     last_name: Mapped[str] = mapped_column(String(50))

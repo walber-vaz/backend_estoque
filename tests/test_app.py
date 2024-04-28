@@ -79,9 +79,7 @@ def test_update_user_by_id(client, user):
     )
 
     response_data = UserSchemaResponseUpdate(
-        message='User updated successfully',
-        status=HTTPStatus.OK,
-        data=[{'first_name': 'John 2'}],
+        message='User updated successfully', status=HTTPStatus.OK
     ).model_dump(mode='json', exclude_none=True)
 
     assert response.status_code == HTTPStatus.OK

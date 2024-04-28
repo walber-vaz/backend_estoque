@@ -14,6 +14,7 @@ from app.schemas.user import (
     UserSchemaUpdate,
     UserWithoutPassword,
 )
+from app.security import get_password_hash
 
 msg_not_found = 'User not found'
 
@@ -24,9 +25,11 @@ def create_user(session: Session, user: UserSchemaCreate) -> UserSchemaResponseC
     if is_email_exists:
         raise ValueError('Email already exists')
 
+    hashed_password = get_password_hash(user.hashed_password)
+
     new_user = User(
         email=user.email,
-        hashed_password=user.hashed_password,
+        hashed_password=hashed_password,
         first_name=user.first_name,
         last_name=user.last_name,
     )
@@ -65,17 +68,18 @@ def update_user_by_id(data: UserSchemaUpdate, session: Session, user_id: UUID):
     if not user:
         raise ValueError(msg_not_found)
 
-    update_fields = {}
     for key, value in data.model_dump(exclude_none=True).items():
-        if getattr(user, key) != value:
+        if key == 'hashed_password':
+            hashed_password = get_password_hash(value)
+            setattr(user, key, hashed_password)
+        else:
             setattr(user, key, value)
-            update_fields[key] = value
 
     session.commit()
     session.refresh(user)
 
     response = UserSchemaResponseUpdate(
-        message='User updated successfully', status=HTTPStatus.OK, data=[update_fields]
+        message='User updated successfully', status=HTTPStatus.OK
     )
 
     return response

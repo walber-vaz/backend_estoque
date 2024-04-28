@@ -50,7 +50,6 @@ class UserSchemaResponseGet(BaseModel):
 
 class UserSchemaResponseUpdate(BaseModel):
     message: str
-    data: list[UserSchemaUpdate] | None
     status: int
 
 
