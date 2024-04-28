@@ -12,6 +12,18 @@ class UserBase(BaseModel):
     is_active: bool = True
 
 
+class UserWithoutPassword(BaseModel):
+    id: UUID
+    first_name: str
+    last_name: str
+    email: EmailStr
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class UserSchemaCreate(UserBase):
     pass
 
@@ -23,34 +35,10 @@ class UserSchemaUpdate(BaseModel):
     email: EmailStr | None = None
 
 
-class UserSchemaResponseUserDB(BaseModel):
-    id: UUID
-    first_name: str
-    last_name: str
-    email: EmailStr
-    is_active: bool
-    hashed_password: str
-    created_at: datetime
-    updated_at: datetime
-    model_config = ConfigDict(from_attributes=True)
-
-
 class UserSchemaResponse(BaseModel):
     message: str
-    data: list[UserSchemaResponseUserDB]
+    data: list[UserWithoutPassword]
     status: int
-
-
-class UserWithoutPassword(BaseModel):
-    id: UUID
-    first_name: str
-    last_name: str
-    email: EmailStr
-    is_active: bool
-    created_at: datetime
-    updated_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class UserSchemaResponseGet(BaseModel):
