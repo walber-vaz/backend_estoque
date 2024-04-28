@@ -8,6 +8,7 @@ from app.models.user import User
 from app.schemas.user import (
     UserSchemaCreate,
     UserSchemaResponseCreate,
+    UserSchemaResponseDelete,
     UserSchemaResponseGet,
     UserSchemaResponseUpdate,
     UserSchemaUpdate,
@@ -87,7 +88,7 @@ def delete_user_by_id(session: Session, user_id: UUID):
     user.is_active = False
     session.commit()
 
-    response = UserSchemaResponseUpdate(
+    response = UserSchemaResponseDelete(
         message='User deleted successfully', status=HTTPStatus.NO_CONTENT, data=None
     )
 

@@ -54,6 +54,11 @@ class UserSchemaResponseUpdate(BaseModel):
     status: int
 
 
+class UserSchemaResponseDelete(BaseModel):
+    message: str
+    status: int
+
+
 class UserId(BaseModel):
     user_id: UUID
 

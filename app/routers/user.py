@@ -8,6 +8,7 @@ from app.database import get_session
 from app.schemas.user import (
     UserSchemaCreate,
     UserSchemaResponseCreate,
+    UserSchemaResponseDelete,
     UserSchemaResponseGet,
     UserSchemaResponseUpdate,
     UserSchemaUpdate,
@@ -67,12 +68,12 @@ def update_by_id(
 @router.delete(
     '/users/{user_id}',
     status_code=HTTPStatus.OK,
-    response_model=UserSchemaResponseUpdate,
+    response_model=UserSchemaResponseDelete,
     response_model_exclude_none=True,
 )
 def delete_by_id(
     user_id: UUID, session: Session = Depends(get_session)
-) -> UserSchemaResponseUpdate | Exception:
+) -> UserSchemaResponseDelete | Exception:
     try:
         response = delete_user_by_id(session=session, user_id=user_id)
         return response
