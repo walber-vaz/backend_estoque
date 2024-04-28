@@ -1,59 +1,16 @@
 [tool.poetry]
 name = "app"
 version = "0.0.1"
-description = ""
+description = "Api de estoque e clients"
 authors = ["Walber Vaz <wvs.walber@gmail.com>"]
-# readme = "README.md"
+readme = "README.md"
+license = "BSD-3-Clause"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "^0.110.2"
-uvicorn = {extras = ["standard"], version = "^0.29.0"}
-httpx = "^0.27.0"
-sqlalchemy = {extras = ["asyncio"], version = "^2.0.29"}
-psycopg = "^3.1.18"
-psycopg-binary = "^3.1.18"
-pydantic-settings = "^2.2.1"
-alembic = "^1.13.1"
-pydantic = {extras = ["email"], version = "^2.7.1"}
-asyncpg = "^0.29.0"
-pyjwt = "^2.8.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-python-multipart = "^0.0.9"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.1.1"
-taskipy = "^1.12.2"
-ruff = "^0.4.1"
 pre-commit = "^3.7.0"
-pytest-cov = "^5.0.0"
-httpx = "^0.27.0"
-
-[tool.ruff]
-line-length = 88
-extend-exclude = ['migrations']
-
-[tool.ruff.lint]
-preview = true
-select = ['I', 'F', 'E', 'W', 'PL', 'PT']
-
-[tool.ruff.format]
-preview = true
-quote-style = 'single'
-
-[tool.pytest.ini_options]
-pythonpath = "."
-addopts = '-p no:warnings'
-
-[tool.taskipy.tasks]
-lint = 'ruff check .; ruff check . --diff'
-format = 'ruff check . --fix; ruff format .'
-run = 'uvicorn app.main:app --reload'
-pre_test = 'task lint'
-test = 'pytest -v -s -x --cov=app -vv --cov-report=term-missing'
-post_test = 'coverage html'
-makemigrations = 'alembic revision --autogenerate'
-migrate = 'alembic upgrade head'
 
 [build-system]
 requires = ["poetry-core"]
