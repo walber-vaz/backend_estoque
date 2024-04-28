@@ -33,6 +33,7 @@ class UserSchemaUpdate(BaseModel):
     last_name: str | None = None
     hashed_password: str | None = None
     email: EmailStr | None = None
+    is_active: bool | None = True
 
 
 class UserSchemaResponse(BaseModel):
@@ -49,7 +50,7 @@ class UserSchemaResponseGet(BaseModel):
 
 class UserSchemaResponseUpdate(BaseModel):
     message: str
-    data: list[UserSchemaUpdate]
+    data: list[UserSchemaUpdate] | None
     status: int
 
 

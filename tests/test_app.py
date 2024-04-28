@@ -96,3 +96,25 @@ def test_update_user_by_id_not_found(client):
 
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json() == {'detail': 'User not found'}
+
+
+def test_delete_user_by_id(client, user):
+    user_validate = UserWithoutPassword.model_validate(user).model_dump()
+
+    response = client.delete(f'{settings.PREFIX}/users/{user_validate.get("id")}')
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'message': 'User deleted successfully',
+        'status': HTTPStatus.NO_CONTENT,
+    }
+    assert not user.is_active
+
+
+def test_delete_user_by_id_not_found(client):
+    response = client.delete(
+        f'{settings.PREFIX}/users/12345678-1234-5678-1234-567812345678'
+    )
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'User not found'}

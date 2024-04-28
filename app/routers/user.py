@@ -12,7 +12,12 @@ from app.schemas.user import (
     UserSchemaResponseUpdate,
     UserSchemaUpdate,
 )
-from app.services.user import create_user, get_user_by_id, update_user_by_id
+from app.services.user import (
+    create_user,
+    delete_user_by_id,
+    get_user_by_id,
+    update_user_by_id,
+)
 
 router = APIRouter(tags=['user'])
 
@@ -54,6 +59,22 @@ def update_by_id(
 ) -> UserSchemaResponseUpdate | Exception:
     try:
         response = update_user_by_id(data=data, session=session, user_id=user_id)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))
+
+
+@router.delete(
+    '/users/{user_id}',
+    status_code=HTTPStatus.OK,
+    response_model=UserSchemaResponseUpdate,
+    response_model_exclude_none=True,
+)
+def delete_by_id(
+    user_id: UUID, session: Session = Depends(get_session)
+) -> UserSchemaResponseUpdate | Exception:
+    try:
+        response = delete_user_by_id(session=session, user_id=user_id)
         return response
     except ValueError as e:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=str(e))

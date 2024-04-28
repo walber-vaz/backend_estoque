@@ -76,3 +76,19 @@ def update_user_by_id(data: UserSchemaUpdate, session: Session, user_id: UUID):
     )
 
     return response
+
+
+def delete_user_by_id(session: Session, user_id: UUID):
+    user = session.scalar(select(User).where(User.id == user_id))
+
+    if not user:
+        raise ValueError('User not found')
+
+    user.is_active = False
+    session.commit()
+
+    response = UserSchemaResponseUpdate(
+        message='User deleted successfully', status=HTTPStatus.NO_CONTENT, data=None
+    )
+
+    return response
