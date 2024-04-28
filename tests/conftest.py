@@ -7,6 +7,7 @@ from app.config import settings
 from app.database import Base, get_session
 from app.main import app
 from app.models.user import User
+from app.security import get_password_hash
 
 
 @pytest.fixture()
@@ -34,14 +35,17 @@ def client(session):
 
 @pytest.fixture()
 def user(session):
+    pwd = 'password'
     user = User(
         first_name='John',
         last_name='Doe',
-        hashed_password='password',
+        hashed_password=get_password_hash(pwd),
         email='john_done@email.com',
     )
     session.add(user)
     session.commit()
     session.refresh(user)
+
+    user.clean_password = pwd
 
     return user
